@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="utf-8">
+    <title>Markerless AR - Creative Project</title>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+</head>
+
+<body style="margin: 0; overflow: hidden;">
+    <button id="startBtn" style="position: absolute; top: 20px; left: 20px; z-index: 999; padding: 10px; border-radius: 5px; background-color: #4CC3D9; color: white; border: none; cursor: pointer;">
+        คลิกเพื่อเปิดระบบเสียง
+    </button>
+
+    <a-scene vr-mode-ui="enabled: false" 
+             arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;">
+        
+        <a-assets>
+            <a-asset-item id="myAnimalModel" src="dc.glb"></a-asset-item>
+            <audio id="clickSound" src="sound/effect.mp3" preload="auto"></audio>
+        </a-assets>
+
+        <a-entity camera look-controls rotation-reader>
+            <a-entity cursor="rayOrigin: mouse"></a-entity>
+        </a-entity>
+
+        <a-entity 
+            id="mainModel"
+            gltf-model="#myAnimalModel" 
+            position="0 1.5 -3" 
+            
+            scale="1 1 1"  rotation="0 0 0"
+            sound="src: #clickSound; on: click"
+            animation="property: rotation; to: 0 360 0; loop: true; dur: 8000"
+
+            animation__click="property: scale; from: 1 1 1; to: 1.1 1.1 1.1; dur: 200; startEvents: click">
+            
+            <a-text value="Click me!" position="0 2.5 0" align="center" color="#FFFFFF" width="4"></a-text>
+        </a-entity>
+
+    </a-scene>
+
+    <script>
+        // ฟังก์ชันจัดการเมื่อคลิกปุ่มเริ่มระบบเสียง [cite: 179]
+        document.getElementById('startBtn').addEventListener('click', function() {
+            const modelEntity = document.querySelector('#mainModel');
+            // แจ้งให้ User ทราบว่าระบบพร้อมแล้ว
+            this.innerText = "ระบบเสียงทำงานแล้ว";
+            this.style.backgroundColor = "#FFC65D";
+            // ซ่อนปุ่มหลังจากเริ่มทำงาน (Optional)
+            setTimeout(() => { this.style.display = 'none'; }, 2000);
+        });
+    </script>
+</body>
+</html>
